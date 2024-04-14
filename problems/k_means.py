@@ -16,9 +16,9 @@ def k_means_clustering(data: np.ndarray, k: int, epsilon: float) -> np.ndarray:
     Returns:
         A 1D numpy array of shape (n,) containing the cluster labels of each data point.
     """
+    # YOUR CODE HERE
     n = data.shape[0]
 
-    # YOUR CODE HERE
     # Initialize the centroids
     centroid_indices = np.random.choice(n, k, replace=False)
     centroids = data[centroid_indices]
@@ -26,14 +26,17 @@ def k_means_clustering(data: np.ndarray, k: int, epsilon: float) -> np.ndarray:
     min_distance = np.inf
     while True:
         centroid_to_point = collections.defaultdict(list)
+        point_to_centroid = np.zeros(n, dtype=int)
         total_distance = 0
 
         # E-step: Assign each data point to the nearest centroid
-        for sample in data:
+        for idx, sample in enumerate(data):
             distances = np.linalg.norm(centroids - sample, axis=1)
             closest_centroid = np.argmin(distances)
             total_distance += distances[closest_centroid]
+
             centroid_to_point[closest_centroid].append(sample)
+            point_to_centroid[idx] = closest_centroid
 
         if total_distance < min_distance - epsilon:
             min_distance = total_distance
@@ -44,11 +47,4 @@ def k_means_clustering(data: np.ndarray, k: int, epsilon: float) -> np.ndarray:
         for i in range(k):
             centroids[i] = np.mean(centroid_to_point[i], axis=0)
 
-    # Assign the cluster labels
-    sample_to_cluster = np.zeros(n, dtype=int)
-    for i, samples in centroid_to_point.items():
-        for sample in samples:
-            idx = np.where((data == sample).all(axis=1))[0]
-            sample_to_cluster[idx] = i
-
-    return sample_to_cluster
+    return point_to_centroid
