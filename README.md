@@ -1,1 +1,2 @@
-# ml-coding-exercises
+# Machine Learning Coding Exercises
+
