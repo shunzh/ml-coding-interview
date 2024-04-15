@@ -1,8 +1,10 @@
 import numpy as np
+
 from problems.k_means import k_means_clustering
 
 
 def assert_clusters(labels, expected_groups):
+    """Check if the labels match the expected groups, subject to permutation of labels."""
     found_groups = {label: set(np.where(labels == label)[0]) for label in np.unique(labels)}
     expected_set = [set(group) for group in expected_groups]
 
@@ -10,7 +12,6 @@ def assert_clusters(labels, expected_groups):
     assert all(any(group == found_group for found_group in found_groups.values()) for group in expected_set)
 
 
-# Use the function in your tests like this:
 def test_basic_functionality():
     data = np.array([[1, 2], [1, 1], [10, 10], [10, 11]])
     k = 2
@@ -29,7 +30,7 @@ def test_closely_packed_clusters():
     assert_clusters(labels, expected_groups)
 
 
-def test_three_close_clusters():
+def test_three_normal_clusters():
     def generate_cluster(center, num_points, variance):
         """Generate 'num_points' points around a 'center' with 'variance'."""
         return np.random.normal(loc=center, scale=variance, size=(num_points, len(center)))
@@ -50,3 +51,15 @@ def test_three_close_clusters():
 
     # Using the assert_clusters utility function to check grouping correctness
     assert_clusters(labels, expected_groups)
+
+
+def test_all_points_zero():
+    # Create a dataset where all points are zero
+    data = np.zeros((10, 2))  # 100 points in 2D, all are zeros
+    k = 2
+    epsilon = 0.01
+
+    labels = k_means_clustering(data, k, epsilon)
+
+    # As long as all labels are 0 or 1, the test passes
+    assert set(labels).issubset({0, 1})
