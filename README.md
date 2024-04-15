@@ -1,2 +1,2 @@
-# Machine Learning Coding Exercises
+# Machine Learning Coding
 
