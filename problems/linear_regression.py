@@ -22,6 +22,16 @@ def linear_regression_gradient(X, y, lr, epoches):
     coefficients of the linear regression model using gradient descent.
 
     Initialize the coefficients to be zero.
+
+    Args:
+        X: A 2D numpy array of shape (n, d) where n is the number of data points
+            and d is the number of features.
+        y: A 1D numpy array of shape (n,) containing the target values.
+        lr: The learning rate.
+        epoches: The number of epoches to train the model.
+
+    Returns:
+        A 1D numpy array of shape (d,) containing the coefficients of the linear regression model.
     """
     # YOUR CODE HERE
     n, d = X.shape
